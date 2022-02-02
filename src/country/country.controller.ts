@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Patch, Param, Delete } from '@nestjs/common';
 import { CountryService } from './country.service';
 
-@Controller('country')
+@Controller('/country')
 export class CountryController {
   constructor(private readonly countryService: CountryService) {}
 
