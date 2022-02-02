@@ -28,7 +28,7 @@ export class CreateNewsDto {
   readonly content: string;
 
   @IsArray()
-  readonly images: [];
+  readonly images: string[];
 
   @IsString()
   @MinLength(2)

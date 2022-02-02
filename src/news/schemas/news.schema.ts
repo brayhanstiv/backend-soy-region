@@ -1,6 +1,10 @@
 // Packages
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Schema as schema } from 'mongoose';
+
+// Schemas
+import { Category } from './../../category/schemas/category.schema';
+import { City } from 'src/city/schemas/city.schema';
 
 @Schema({ timestamps: true })
 export class News extends Document {
@@ -10,14 +14,14 @@ export class News extends Document {
   @Prop()
   date: Date;
 
-  @Prop()
-  category: string;
+  @Prop({ type: schema.Types.ObjectId, ref: 'Category' })
+  category: Category;
 
   @Prop()
   content: string;
 
   @Prop()
-  images: [];
+  images: string[];
 
   @Prop()
   video: string;
@@ -25,8 +29,8 @@ export class News extends Document {
   @Prop()
   author: string;
 
-  @Prop()
-  location: string;
+  @Prop({ type: schema.Types.ObjectId, ref: 'City' })
+  location: City;
 
   @Prop()
   status: boolean;

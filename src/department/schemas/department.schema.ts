@@ -1,6 +1,9 @@
 // Packages
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Schema as schema } from 'mongoose';
+
+// Country
+import { Country } from '../../country/schemas/country.schema';
 
 @Schema({ timestamps: true })
 export class Department extends Document {
@@ -10,8 +13,8 @@ export class Department extends Document {
   @Prop()
   code: string;
 
-  @Prop()
-  Country: string;
+  @Prop({ type: schema.Types.ObjectId, ref: 'Country' })
+  Country: Country;
 
   @Prop()
   status: boolean;
