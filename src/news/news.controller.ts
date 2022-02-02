@@ -1,15 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Param, Delete } from '@nestjs/common';
 import { NewsService } from './news.service';
-import { CreateNewsDto } from './dto/create-news.dto';
-import { UpdateNewsDto } from './dto/update-news.dto';
 
-@Controller('news')
+@Controller('/news')
 export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
   @Post()
-  create(@Body() createNewsDto: CreateNewsDto) {
-    return this.newsService.create(createNewsDto);
+  create() {
+    return this.newsService.create();
   }
 
   @Get()
@@ -23,8 +21,8 @@ export class NewsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNewsDto: UpdateNewsDto) {
-    return this.newsService.update(+id, updateNewsDto);
+  update(@Param('id') id: string) {
+    return this.newsService.update(+id);
   }
 
   @Delete(':id')
