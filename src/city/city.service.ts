@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateCityDto } from './dto/create-city.dto';
 import { UpdateCityDto } from './dto/update-city.dto';
+import { City } from './schemas/city.schema';
 
 @Injectable()
 export class CityService {
-  create(/* createCityDto: CreateCityDto */) {
-    return 'This action adds a new city';
+  constructor(@InjectModel(City.name) private cityModel: Model<City>) {}
+
+  async create(createCityDto: CreateCityDto): Promise<City> {
+    const createdCity = new this.cityModel(createCityDto);
+    return createdCity.save();
   }
 
-  findAll() {
-    return `This action returns all city`;
+  async findAll(from: number, limit: number): Promise<City[]> {
+    return this.cityModel.find({ status: true }).skip(from).limit(limit).exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} city`;
+  async findOne(id: string): Promise<City> {
+    return this.cityModel.findById(id);
   }
 
-  update(id: number /* updateCityDto: UpdateCityDto */) {
-    return `This action updates a #${id} city`;
+  async update(id: string, updateCityDto: UpdateCityDto): Promise<City> {
+    return this.cityModel.findByIdAndUpdate(id, updateCityDto, { new: true });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} city`;
+  async remove(id: string): Promise<City> {
+    return this.cityModel.findByIdAndDelete(id);
+  }
+
+  async total(): Promise<number> {
+    return this.cityModel.countDocuments({ status: true });
   }
 }
