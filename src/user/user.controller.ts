@@ -1,32 +1,88 @@
-import { Controller, Get, Post, Patch, Param, Delete } from '@nestjs/common';
+import { CreateUserDto } from './../user/dto/create-user.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Param,
+  Delete,
+  Res,
+  Body,
+  HttpStatus,
+  Query,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserService } from './user.service';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create() {
-    return this.userService.create();
+  async create(@Res() res, @Body() createdUserDto: CreateUserDto) {
+    const data = await this.userService.create(createdUserDto);
+    return res.status(HttpStatus.CREATED).json({
+      statusCode: HttpStatus.CREATED,
+      message: 'User Created Successfully',
+      payload: data,
+    });
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async findAll(
+    @Res() res,
+    @Query('from') from = 0,
+    @Query('limit') limit = 10,
+  ) {
+    const data = await this.userService.findAll(from, limit);
+    const total = await this.userService.total();
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      payload: data,
+      total: total,
+    });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  async findOne(@Res() res, @Param('id') id: string) {
+    const data = await this.userService.findOne(id);
+    if (!data) {
+      throw new NotFoundException('User Not Found');
+    }
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      payload: data,
+    });
   }
 
   @Patch(':id')
-  update(@Param('id') id: string) {
-    return this.userService.update(+id);
+  async update(
+    @Res() res,
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    const data = await this.userService.update(id, updateUserDto);
+    if (!data) {
+      throw new NotFoundException('User Not Found');
+    }
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      message: 'User update Successfully',
+      payload: data,
+    });
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  async remove(@Res() res, @Param('id') id: string) {
+    const data = await this.userService.remove(id);
+    if (!data) {
+      throw new NotFoundException('User Not Found');
+    }
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      message: 'User deleted successfully',
+      payload: data,
+    });
   }
 }
