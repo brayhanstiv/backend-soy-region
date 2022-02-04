@@ -4,8 +4,9 @@ import {
   IsBoolean,
   IsNotEmpty,
   MinLength,
-  IsDate,
+  // IsDate,
   IsArray,
+  IsDateString,
 } from 'class-validator';
 
 export class CreateNewsDto {
@@ -14,7 +15,7 @@ export class CreateNewsDto {
   @IsNotEmpty()
   readonly title: string;
 
-  @IsDate()
+  @IsDateString()
   readonly date: Date;
 
   @IsString()
