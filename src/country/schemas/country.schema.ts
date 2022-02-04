@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class Country extends Document {
-  @Prop()
+  @Prop({ uppercase: true })
   name: string;
 
   @Prop()
