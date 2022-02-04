@@ -1,26 +1,47 @@
+import { Department } from './schemas/department.schema';
+import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 
 @Injectable()
 export class DepartmentService {
-  create(/* createDepartmentDto: CreateDepartmentDto */) {
-    return 'This action adds a new department';
+  constructor(
+    @InjectModel(Department.name) private deparmentModel: Model<Department>,
+  ) {}
+
+  async create(createDepartmentDto: CreateDepartmentDto): Promise<Department> {
+    const createdDepartment = new this.deparmentModel(createDepartmentDto);
+    return createdDepartment.save();
   }
 
-  findAll() {
-    return `This action returns all department`;
+  async findAll(from: number, limit: number): Promise<Department[]> {
+    return this.deparmentModel
+      .find({ status: true })
+      .skip(from)
+      .limit(limit)
+      .exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} department`;
+  async findOne(id: string): Promise<Department> {
+    return this.deparmentModel.findById(id);
   }
 
-  update(id: number /* updateDepartmentDto: UpdateDepartmentDto */) {
-    return `This action updates a #${id} department`;
+  async update(
+    id: string,
+    updateDepartmentDto: UpdateDepartmentDto,
+  ): Promise<Department> {
+    return this.deparmentModel.findByIdAndUpdate(id, updateDepartmentDto, {
+      new: true,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} department`;
+  async remove(id: string): Promise<Department> {
+    return this.deparmentModel.findByIdAndDelete(id);
+  }
+
+  async total(): Promise<number> {
+    return this.deparmentModel.countDocuments({ status: true });
   }
 }
