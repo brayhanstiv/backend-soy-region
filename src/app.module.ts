@@ -17,7 +17,9 @@ import { MongooseModule } from '@nestjs/mongoose';
     CityModule,
     DepartmentModule,
     CountryModule,
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/soyregion'),
+    MongooseModule.forRoot(
+      'mongodb+srv://admin:gi8AmdIjJC03dcEa@soyregioncluster.e8lom.mongodb.net/soyregion',
+    ),
   ],
   controllers: [AppController],
   providers: [AppService],

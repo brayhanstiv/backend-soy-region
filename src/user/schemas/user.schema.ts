@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class User extends Document {
-  @Prop()
+  @Prop({ uppercase : true })
   name: string;
 
   @Prop()
@@ -19,7 +19,7 @@ export class User extends Document {
   @Prop()
   user: string;
 
-  @Prop()
+  @Prop({ default: true })
   status: boolean;
 }
 export const UserSchema = SchemaFactory.createForClass(User);

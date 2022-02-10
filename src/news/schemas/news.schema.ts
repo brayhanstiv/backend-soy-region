@@ -3,12 +3,13 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as schema } from 'mongoose';
 
 // Schemas
-import { Category } from './../../category/schemas/category.schema';
+import { Category } from 'src/category/schemas/category.schema';
 import { City } from 'src/city/schemas/city.schema';
+import { User } from 'src/user/schemas/user.schema';
 
 @Schema({ timestamps: true })
 export class News extends Document {
-  @Prop()
+  @Prop({ uppercase: true })
   title: string;
 
   @Prop()
@@ -26,13 +27,13 @@ export class News extends Document {
   @Prop()
   video: string;
 
-  @Prop()
-  author: string;
+  @Prop({ type: schema.Types.ObjectId, ref: 'User' })
+  author: User;
 
   @Prop({ type: schema.Types.ObjectId, ref: 'City' })
   location: City;
 
-  @Prop()
+  @Prop({ default: true })
   status: boolean;
 }
 export const NewsSchema = SchemaFactory.createForClass(News);
