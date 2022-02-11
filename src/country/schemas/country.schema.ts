@@ -8,9 +8,12 @@ export class Country extends Document {
   name: string;
 
   @Prop()
-  code: string;
+  alpha2Code: string;
 
   @Prop()
+  alpha3Code: string;
+
+  @Prop({ default: true })
   status: boolean;
 }
 

@@ -4,10 +4,10 @@ import { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class Category extends Document {
-  @Prop()
+  @Prop({ uppercase: true })
   name: string;
 
-  @Prop()
+  @Prop({ default: true })
   status: boolean;
 }
 

@@ -1,5 +1,5 @@
 // Packages
-import { IsString, IsBoolean, IsNotEmpty, MinLength } from 'class-validator';
+import { IsString, IsBoolean, IsNotEmpty, MinLength, Matches } from 'class-validator';
 
 export class CreateCountryDto {
   @IsString()
@@ -7,9 +7,13 @@ export class CreateCountryDto {
   @IsNotEmpty()
   readonly name: string;
 
-  @MinLength(2)
+  @Matches(/^[A-Za-z]{2}$/)
   @IsNotEmpty()
-  readonly code: string;
+  readonly alpha2Code: string;
+
+  @Matches(/^[A-Za-z]{3}$/)
+  @IsNotEmpty()
+  readonly alpha3Code: string;
 
   @IsBoolean()
   readonly status: boolean;
